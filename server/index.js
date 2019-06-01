@@ -15,7 +15,7 @@ const init = async () => {
         host: 'localhost',
         database: 'postgres',
         password: 'poltrona',
-        port: 5432,
+        port: 5432 ,    
     })
 
     await client.connect()
