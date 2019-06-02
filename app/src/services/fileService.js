@@ -4,7 +4,9 @@ class FileService {
     
     constructor () {
         this.saveFile = (file) => {
-            return HttpHelper.post('upload', file, 'image/gif')
+            const httpHelper = new HttpHelper();
+
+            return httpHelper.post('upload', file, 'image/gif')
         }
     }
 }
