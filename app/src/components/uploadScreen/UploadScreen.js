@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import {DropzoneArea} from 'material-ui-dropzone';
-import {RdxVideo, Overlay, Controls} from 'react-html5-video-editor';
+import Button from '@material-ui/core/Button';
+import FileService from '../../services/fileService';
 
 class UploadScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {files: []}
+        this.state = {file: {}}
     }
 
     onChangeHandler = files => {
-        this.setState({files: files});
+        this.setState({file: files[0]});
 
-        console.log(files)
+    }
+
+    uploadFile = () => {
+        const fileService = new FileService();
+
+        fileService.saveFile(this.state.file)
     }
 
     render() {
@@ -27,11 +33,9 @@ class UploadScreen extends Component {
                     dropzoneText="Escolha seu gif/vídeo"
                     showPreviews={false}
                 />
-                <RdxVideo autoPlay loop muted>
-                    <Overlay />
-                    <Controls />
-                    <source src={this.state.files[0]} type="video/mp4" />
-                </RdxVideo>            
+                <Button variant="contained" color="primary" onClick={this.uploadFile}>
+                    Salvar arquivo
+                </Button>
             </div>
         )
     }
