@@ -14,5 +14,13 @@ module.exports = [
                 'allow': 'multipart/form-data'
             }
         }
+    },
+    {
+        'path':'/file-crop',
+        'method': 'POST',
+        'handler': handler.cropFile,
+        'config': {
+            'description': 'Crop a file'
+        }
     }
 ]

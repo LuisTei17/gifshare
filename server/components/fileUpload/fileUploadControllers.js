@@ -9,3 +9,13 @@ exports.uploadGif = async (request, h) => {
         throw error;
     }
 }
+
+exports.cropFile = async (request, h) => {
+    try {
+        const file = await fileUpload.cropFile(request.payload);
+
+        return h.response(file);
+    } catch (error) {
+        throw error;
+    }
+}

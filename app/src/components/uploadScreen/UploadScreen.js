@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {DropzoneArea} from 'material-ui-dropzone';
 import Button from '@material-ui/core/Button';
 import FileService from '../../services/fileService';
-import VideoEditing from './videoEditing/videoEditing';
+import VideoEditing from '../videoEditing/videoEditing';
+import Modal from '@material-ui/core/Modal';
+import './uploadScreen.css';
 
 class UploadScreen extends Component {
     constructor(props) {
@@ -44,7 +46,9 @@ class UploadScreen extends Component {
                     dropzoneText="Escolha seu gif/vídeo"
                     showPreviews={false}
                 />
-                {this.renderVideoEditing()}
+                <Modal className="modal" open={this.state.file !== false}>
+                    <VideoEditing path={this.state.path} file={this.state.file} />
+                </Modal>
                 <br></br>
                 <br></br>
                 <br></br>
