@@ -10,6 +10,7 @@ class VideoEditing extends Component {
         this.state = {
             path: props.path,
             file: props.file,
+            closeModal: props.closeModal,
             video: {},
             selectorOne: {},
             selectorTwo: {}
@@ -26,10 +27,8 @@ class VideoEditing extends Component {
         
         progressbar.style.width = video.width + 'px';
         selectorTwo.style.left = video.width + 'px';
-        selectorTwo.currentTime = ((video.width * Math.floor(video.duration)) / video.width)
 
         selectorOne.style.left = 0 + 'px';
-        selectorTwo.currentTime = ((1 * Math.floor(video.duration)) / video.width)
         
         video.removeAttribute('controls');
         video.progressLength = video.width;
@@ -88,7 +87,10 @@ class VideoEditing extends Component {
             intervalEnd = intervalOne;
         }
 
-        fileService.cropFile(this.state.file, intervalStart, intervalEnd);
+        fileService.cropFile(this.state.file, intervalStart, intervalEnd)
+            .then((response) => {
+                this.state.closeModal(response);
+            });
     }
 
     render() {
