@@ -10,8 +10,14 @@ class UploadScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {file: false, path: {}}
+        
+        this.state = {file: false, path: {}, open: false}
+        this.closeModal = this.closeModal.bind(this);
          
+    }
+
+    closeModal() {
+        this.setState({open: false});
     }
 
     renderVideoEditing = () => {
@@ -24,7 +30,7 @@ class UploadScreen extends Component {
     onChangeHandler = files => {
         const file = files[0],
             path = window.event.srcElement.result;
-        this.setState({file: file, path: path});
+        this.setState({file: file, path: path, open: true});
 
     }
 
@@ -46,8 +52,8 @@ class UploadScreen extends Component {
                     dropzoneText="Escolha seu gif/vídeo"
                     showPreviews={false}
                 />
-                <Modal className="modal" open={this.state.file !== false}>
-                    <VideoEditing path={this.state.path} file={this.state.file} />
+                <Modal className="modal" open={this.state.open}>
+                    <VideoEditing path={this.state.path} file={this.state.file} open={this.state.open} closeModal={this.closeModal}/>
                 </Modal>
                 <br></br>
                 <br></br>
