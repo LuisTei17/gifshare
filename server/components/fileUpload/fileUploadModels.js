@@ -33,14 +33,37 @@ exports.uploadGif = async (file) => {
 }
 
 exports.cropFile = async ({file, intervalStart, intervalEnd}) => {
-    const {filePath, filename} = await saveFile(file, 'mp4');
+    const {filePath, filename} = await saveFile(file, 'mp4'),
+        convertedFilePath = `${path}converted${filename}.gif`;
+    let result;
+    try {
 
-    ffmpeg.setFfmpegPath(ffmpegPath);
-    ffmpeg(filePath)
-    .setStartTime(intervalStart)
-    .setDuration(intervalEnd)
-    .save(`${path}converted${filename}.mp4`);
+        await new Promise((resolve, reject) => {
+            ffmpeg.setFfmpegPath(ffmpegPath);
+            ffmpeg(filePath)
+            .setStartTime(intervalStart)
+            .setDuration(intervalEnd)
+            .format('gif')
+            .on('error', error => {
+                return reject(error);
+            })
+            .on('end', () => {
+                return resolve();
+            })
+            .save(convertedFilePath);
+        });
+
+        result = await db.query(queries.uploadGif(convertedFilePath, filename));
+
+    } catch (err) {
+        throw err;
+    } finally {
+        fs.unlink(filePath, (err) => {
+            if (err)
+                return reject(err);
+        })
+    }
 
 
-    return;
+    return result.rows;
 }
