@@ -1,0 +1,41 @@
+video {
+    background-color: black;
+}
+
+.progressbar {
+    height: 5px;
+    background-color: #c1c1c1;
+}
+
+.selectorOne, .selectorTwo {
+    display: inline-block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: 2px solid #aaaa;
+    background-color: #cecece;
+    z-index: 10;
+}
+
+.label {
+    color: black;
+    position: inherit;
+    top: 10px;
+}
+
+.form {
+    position: relative;
+    top: 20px;
+    margin: auto;
+    padding: 30px;
+    background-color: #f1f1f1f1;
+    width: 500px;
+    height: 500px;
+    border-radius: 5%;
+}
+
+.video-cropper {
+    position: absolute;
+    left: 130px;
+}

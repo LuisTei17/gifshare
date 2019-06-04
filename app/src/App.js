@@ -1,10 +1,14 @@
 import React from 'react';
-import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import uploadScreen from './components/uploadScreen/UploadScreen';
 
 function App() {
+
   return (
     <div className="App">
-      <h1>GifShare</h1>
+      <Router>
+        <Route exact path="/" component={uploadScreen} />
+      </Router>
     </div>
   );
 }
