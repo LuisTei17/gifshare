@@ -16,6 +16,8 @@ const init = async () => {
         database = new Db();
         global.database = await database.connect();
     
+    await server.register(require('@hapi/inert'));
+
     await routes.mountRoutes(server);
 
     await server.start();

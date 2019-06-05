@@ -20,6 +20,10 @@ class FileService {
 
             return httpHelper.post('file-crop', data);
         }
+
+        this.download = (filename) => {
+            return httpHelper.post('download/' + filename, {});
+        }
     }
 }
 
