@@ -5,10 +5,11 @@ class HttpHelper {
 
         this.url = appconf.url;
         
-        this.post = async (path, data) => {
+        this.post = async (path, data, contentType = 'application/json') => {
             return fetch(this.url + path, {
                 method: 'POST',
-                body: data
+                body: data,
+                contentType: 'application/json'
             })
         }
 

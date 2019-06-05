@@ -4,7 +4,7 @@ const joi = require('joi'),
 module.exports = [
     {
         'path':'/download/{filename}',
-        'method': 'GET',
+        'method': 'POST',
         'handler': handler.downloadFile,
         'config': {
             'description': 'Crop a file',
