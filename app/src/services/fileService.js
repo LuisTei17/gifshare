@@ -5,9 +5,11 @@ class FileService {
     constructor () {
         const httpHelper = new HttpHelper();
 
-        this.saveFile = (file) => {
+        this.saveFile = (file, expirationDate, password) => {
             const data = new FormData();
             data.append('file', file);
+            data.append('expirationDate', expirationDate);
+            data.append('password', password);
 
             return httpHelper.post('upload', data)
         }

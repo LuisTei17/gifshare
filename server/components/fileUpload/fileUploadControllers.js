@@ -1,10 +1,11 @@
-const fileUpload = require('./fileUploadModels');
+const fileUpload = require('./fileUploadModels'),
+    fs = require('fs');
 
 exports.uploadGif = async (request, h) => {
     try {
-        const uploadedGif = await fileUpload.uploadGif(request.payload.file);
+        const filename = await fileUpload.uploadGif(request.payload);
 
-        return h.response(uploadedGif);
+        return h.response({filename});
     } catch (error) {
         throw error;
     }
@@ -12,9 +13,9 @@ exports.uploadGif = async (request, h) => {
 
 exports.cropFile = async (request, h) => {
     try {
-        const file = await fileUpload.cropFile(request.payload);
+        const filePath = await fileUpload.cropFile(request.payload);
 
-        return h.response(file);
+        return h.file(filePath, {confine: false});
     } catch (error) {
         throw error;
     }

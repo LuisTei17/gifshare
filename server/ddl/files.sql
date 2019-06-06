@@ -3,3 +3,6 @@ CREATE TABLE file_paths (
     path CHARACTER VARYING(500),
     filename CHARACTER VARYING(200)
 )
+
+ALTER TABLE file_paths ADD COLUMN expiration_date DATE NOT NULL DEFAULT CURRENT_DATE
+ALTER TABLE file_paths ADD COLUMN password VARCHAR 
