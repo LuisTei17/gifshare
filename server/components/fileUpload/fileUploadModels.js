@@ -2,8 +2,9 @@ const queries = require('./fileUploadQueries'),
     uuid = require('uuid/v1'),
     path = `${__dirname}/../../assets/gifs/`,
     fs = require('fs'),
-    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-    ffmpeg = require('fluent-ffmpeg');
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path,
+    ffmpeg = require('fluent-ffmpeg'),
+    md5 = require('md5'),
     db = global.database;
 
 const saveFile = async (data, extension) => {
@@ -14,7 +15,7 @@ const saveFile = async (data, extension) => {
         await new Promise((resolve, reject) => {
             fs.writeFile(filePath, data, (err) => {
                 if (err)
-                    reject(err);
+                    reject (err);
                 resolve();
             });
         });
@@ -25,17 +26,20 @@ const saveFile = async (data, extension) => {
     }
 };
 
-exports.uploadGif = async (file) => {
-    const {filePath, filename} = await saveFile(file, 'gif'),
-        result = await db.query(queries.uploadGif(filePath, filename));
+exports.uploadGif = async ({file, expirationDate, password}) => {
+    let hashedPassword;
 
-    return result.rows[0];
+    if (password)
+        hashedPassword = md5(password);
+    const {filePath, filename} = await saveFile(file._data, 'gif'),
+        result = await db.query(queries.uploadGif(filePath, filename, expirationDate, hashedPassword));
+
+    return filename;
 }
 
 exports.cropFile = async ({file, intervalStart, intervalEnd}) => {
     const {filePath, filename} = await saveFile(file, 'mp4'),
         convertedFilePath = `${path}converted${filename}.gif`;
-    let result;
     try {
 
         await new Promise((resolve, reject) => {
@@ -53,8 +57,6 @@ exports.cropFile = async ({file, intervalStart, intervalEnd}) => {
             .save(convertedFilePath);
         });
 
-        result = await db.query(queries.uploadGif(convertedFilePath, filename));
-
     } catch (err) {
         throw err;
     } finally {
@@ -65,5 +67,5 @@ exports.cropFile = async ({file, intervalStart, intervalEnd}) => {
     }
 
 
-    return result.rows;
+    return convertedFilePath;
 }

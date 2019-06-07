@@ -1,35 +1,32 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import FileService from '../../services/fileService';
+import PrivateDownload from '../PrivateDownload/PrivateDownload';
+import PublicDownload from '../PublicDownload/PublicDownload';
 
-class UploadScreen extends Component {
+class FileDownload extends Component {
     constructor(props) {
         super(props);
 
-        
-        this.state = {fileStr: null, filename: this.props.match.params.filename}
-
+        this.state = {
+            fileStr: null,
+            filename: this.props.match.params.filename,
+            private: false
+        }
     }
 
     async componentDidMount() {
         const fileService = new FileService(),
-            response = await fileService.download(this.state.filename),
+            response = await fileService.checkPrivacy(this.state.filename),
             data = await response.json();
-        console.log(data);
-        this.setState({fileStr: `data:image/gif;base64,${data.fileStr}`})
+
+        this.setState({private: data.private});
     }
 
     render() {
-
-        return (
-            <div>
-                <h1>Download</h1>
-                <a href={this.state.fileStr} download>
-                    Salvar arquivo
-                </a>
-            </div>
-        )
+        if (this.state.private)
+            return (<PrivateDownload filename={this.state.filename} />);
+        return (<PublicDownload filename={this.state.filename} />);
     }
 }
 
-export default UploadScreen;
+export default FileDownload;

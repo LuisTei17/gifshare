@@ -16,7 +16,7 @@ class VideoEditing extends Component {
             selectorTwo: {}
         };
         this.dragElement = this.dragElement.bind(this);
-        this.crop = this.crop.bind(this);
+        this.cropVideo = this.cropVideo.bind(this);
     }
 
     componentDidMount() {
@@ -74,7 +74,7 @@ class VideoEditing extends Component {
           }
     }
 
-    crop () {
+    async cropVideo () {
         const fileService = new FileService(),
             intervalOne = this.state.selectorOne.currentTime,
             intervalTwo = this.state.selectorTwo.currentTime;
@@ -87,11 +87,10 @@ class VideoEditing extends Component {
             intervalEnd = intervalOne;
         }
 
-        fileService.cropFile(this.state.file, intervalStart, intervalEnd)
-            .then((response) => {
-                this.state.closeModal(response);
-            });
-    }
+        const response = await fileService.cropFile(this.state.file, intervalStart, intervalEnd),
+            file = await response.blob();                
+        this.state.closeModal(file);
+    };
 
     render() {
         return (
@@ -104,7 +103,7 @@ class VideoEditing extends Component {
                         <div onMouseDown={this.dragElement} className="selectorOne"><p className="label">{this.state.selectorOne.currentTime}</p></div>
                         <div onMouseDown={this.dragElement} className="selectorTwo"><p className="label">{this.state.selectorTwo.currentTime}</p></div>
                     </div>
-                    <Button variant="contained" color="primary" onClick={this.crop}>
+                    <Button variant="contained" color="primary" onClick={this.cropVideo}>
                         Cortar arquivo
                     </Button>
                 </div>
