@@ -4,7 +4,7 @@ const queries = require('./fileUploadQueries'),
     fs = require('fs'),
     ffmpegPath = require('@ffmpeg-installer/ffmpeg').path,
     ffmpeg = require('fluent-ffmpeg'),
-    passwordHash = require('password-hash'),
+    md5 = require('md5'),
     db = global.database;
 
 const saveFile = async (data, extension) => {
@@ -30,7 +30,7 @@ exports.uploadGif = async ({file, expirationDate, password}) => {
     let hashedPassword;
 
     if (password)
-        hashedPassword = passwordHash.generate(password);
+        hashedPassword = md5(password);
     const {filePath, filename} = await saveFile(file._data, 'gif'),
         result = await db.query(queries.uploadGif(filePath, filename, expirationDate, hashedPassword));
 

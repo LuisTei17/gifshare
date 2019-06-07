@@ -23,8 +23,15 @@ class FileService {
             return httpHelper.post('file-crop', data);
         }
 
-        this.download = (filename) => {
-            return httpHelper.post('download/' + filename, {});
+        this.download = (filename, password) => {
+            let jsonPassword;
+            if (password)
+                jsonPassword = JSON.stringify({password});
+            return httpHelper.post('download/' + filename, jsonPassword);
+        }
+
+        this.checkPrivacy = (filename) => {
+            return httpHelper.get('check-privacy/' + filename);
         }
     }
 }

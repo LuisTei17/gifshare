@@ -3,7 +3,10 @@ const fileDownload = require('./fileDownloadModels'),
 
 exports.downloadFile = async (request, h) => {
     try {
-        const filePath = await fileDownload.downloadFile(request.params.filename);
+        const filePath = await fileDownload.downloadFile(
+                request.params.filename,
+                request.payload
+            );
             fileBuffer = await new Promise((resolve, reject) => {
                 fs.readFile(filePath, (err, data) => {
                     if (err)
@@ -17,4 +20,14 @@ exports.downloadFile = async (request, h) => {
     } catch (error) {
         throw error;
     }
-}
+};
+
+exports.checkPrivacy = async (request, h) => {
+    try {
+        const fileData = await fileDownload.checkPrivacy(request.params.filename);
+
+        return h.response(fileData);
+    } catch (error) {
+        throw error;
+    }
+};
